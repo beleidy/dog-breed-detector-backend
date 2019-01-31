@@ -1,29 +1,41 @@
 from flask import Flask, jsonify, request
+import PIL
+from io import BytesIO
 from detector import detector as D
 
 application = Flask(__name__)
 
 @application.route("/", methods=['POST'])
 def detect():
-    uploaded_image = request.files['image']
-    uploaded_image = uploaded_image.read()
+    try:
+        uploaded_image = request.files.get('image', False)
+        if uploaded_image:
+            uploaded_image = uploaded_image.read()
+        else:
+            return err("No file sent")
+    
+        try:
+            uploaded_image = PIL.Image.open(BytesIO(uploaded_image))
+        except IOError:
+            return err("File is not an image")
 
-    dogs, dog_breed = False, ""
+        dogs, dog_breed = False, None
 
-    # Check if there are dogs
-    dogs = D.dog_detector(uploaded_image)
+        is_dog = D.dog_detector(uploaded_image)
 
-    # If we have a dog then we check the breed
-    if dogs:
-        dog_breed = D.breed_detector(uploaded_image)
+        if is_dog:
+            dog_breed = D.breed_detector(uploaded_image)
+    
+        response = {'dog_detected': is_dog,'breed_detected': dog_breed}
+        return jsonify(response)
 
-    # create dict holding response
-    response = {
-        'dog_detected': dogs,
-        'breed_detected': dog_breed
-    }
+    except:
+        return err()
 
-    return jsonify(response)
+
+def err(message="Unknown Error"):
+    return jsonify({"Error": message})
+
 
 if __name__ == "__main__":
     application.run()
