@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dog-breed-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dog-breed-backend
+  template:
+    metadata:
+      labels:
+        app: dog-breed-backend
+    spec:
+      containers:
+        - name: dog-breed-backend-app
+          image: eu.gcr.io/portfolio-230113/dog-breed-backend
+          resources:
+            requests:
+              cpu: "50m"
