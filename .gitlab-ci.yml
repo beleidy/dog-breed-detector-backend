@@ -25,7 +25,7 @@ deploy:
     - gcloud config set container/cluster portfolio-apps
     - gcloud config set compute/zone europe-west2-a
     - gcloud container clusters get-credentials portfolio-apps --zone europe-west2-a
-    - kubectl apply -f k8s/simple-counter-deployment.yaml
-    - kubectl apply -f k8s/simple-counter-service.yaml
+    - kubectl apply -f k8s/dog-breed-backend-deployment.yaml
+    - kubectl apply -f k8s/dog-breed-backend-service.yaml
   only:
     - master
