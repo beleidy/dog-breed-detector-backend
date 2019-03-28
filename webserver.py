@@ -29,7 +29,7 @@ def detect():
         else:
             return err("this doesn't look like a dog")
 
-        response = {'dog_detected': is_dog, 'breed_detected': dog_breed}
+        response = {'breed': dog_breed}
         return jsonify(response)
 
     except:
