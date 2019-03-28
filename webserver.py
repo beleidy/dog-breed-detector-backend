@@ -37,7 +37,7 @@ def detect():
 
 
 def err(message="Something went wrong but we don't know what"):
-    return jsonify({"Error": message})
+    return jsonify({"error": message})
 
 
 if __name__ == "__main__":
